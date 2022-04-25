@@ -1,0 +1,79 @@
+{
+  "name": "create-speedybot",
+  "version": "0.0.0",
+  "description": "Low-dependency scaffolder for speedybot conversation projects",
+  "author": " @valgaze",
+  "bin": {
+    "create-speedybot": "./bin/run"
+  },
+  "homepage": "https://github.com/valgaze/create-speedybot",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "repository": "valgaze/create-speedybot",
+  "files": [
+    "/bin",
+    "/dist",
+    "/npm-shrinkwrap.json",
+    "/oclif.manifest.json"
+  ],
+  "dependencies": {
+    "@oclif/color": "^1.0.1",
+    "@oclif/core": "^1",
+    "@oclif/plugin-help": "^5",
+    "fs-extra": "^10.0.1",
+    "inquirer": "^8.2.2",
+    "speedybot-mini": "0.0.2"
+  },
+  "devDependencies": {
+    "@oclif/test": "^2",
+    "@types/chai": "^4",
+    "@types/envinfo": "^7.8.1",
+    "@types/fs-extra": "^9.0.13",
+    "@types/inquirer": "^8.2.1",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.9.4",
+    "@types/supports-color": "^8.1.1",
+    "@types/lodash.get": "^4.4.7",
+    "chai": "^4",
+    "eslint": "^7.32.0",
+    "eslint-config-oclif": "^4",
+    "eslint-config-oclif-typescript": "^1.0.2",
+    "globby": "^11",
+    "mocha": "^9",
+    "oclif": "^2",
+    "shx": "^0.3.3",
+    "ts-node": "^10.2.1",
+    "tslib": "^2.3.1",
+    "typescript": "^4.4.3"
+  },
+  "oclif": {
+    "bin": "create-speedybot",
+    "dirname": "create-speedybot",
+    "commands": "./dist/commands",
+    "plugins": [
+      "@oclif/plugin-help"
+    ],
+    "topicSeparator": " "
+  },
+  "scripts": {
+    "start": "clear && npm run build && ./bin/run webhook --help -l=de",
+    "build": "rm -rf dist && tsc -b",
+    "lint": "eslint . --ext .ts --config .eslintrc",
+    "postpack": "rm -f oclif.manifest.json",
+    "posttest": "yarn lint",
+    "prepack": "yarn build && oclif manifest && oclif readme",
+    "test": "mocha --forbid-only \"test/**/*.test.ts\"",
+    "version": "oclif readme && git add README.md"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "bugs": "https://github.com/valgaze/create-speedybot/issues",
+  "keywords": [
+    "oclif"
+  ],
+  "types": "dist/index.d.ts",
+  "pkg": {
+    "scripts": "./lib/**/*.js"
+  }
+}
