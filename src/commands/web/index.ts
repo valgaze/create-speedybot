@@ -1,5 +1,5 @@
 import {Flags, CliUx} from '@oclif/core'
-import {CommonFlags, argvParser} from './../../util/common'
+import {CommonFlags, argvParser, ascii_art} from './../../util/common'
 import Command from '../../base'
 import {i18n} from './../../i18n'
 import {url} from '@oclif/core/lib/parser/flags'
@@ -46,7 +46,9 @@ export default class Web extends Command<typeof Command.flags> {
     if (token) {
       urlPath = `${urlPath}?access_id=${token}`
     }
-    this.log(`Opening site available below (press any key to exit): 
+
+    ascii_art()
+    this.log(`${this.t('cli.web.lingerMessage')}: 
 
 ${urlPath}`)
     CliUx.ux.open(urlPath)

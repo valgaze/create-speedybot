@@ -72,7 +72,7 @@ export default class Setup extends Command<typeof Command.flags> {
     } else {
       const valid = Object.values(repos).map((repo) => repo.keyword)
       if (!valid.includes(repo)) {
-        this.log(`\nValid values: ${valid.join(', ')}\n`)
+        this.log(`\${valid.join(', ')}\n`)
         this.error(this.t('cli.setup.flags.repo.error', {repo}))
       }
     }
