@@ -2,7 +2,6 @@ import {Flags, CliUx} from '@oclif/core'
 import {CommonFlags, argvParser, ascii_art} from './../../util/common'
 import Command from '../../base'
 import {i18n} from './../../i18n'
-import {url} from '@oclif/core/lib/parser/flags'
 
 const earlyFlag = argvParser(process.argv) || ''
 
@@ -31,8 +30,7 @@ export default class Web extends Command<typeof Command.flags> {
   async run(): Promise<void> {
     const {flags} = await this.parse(Web)
     let token = flags.token ? flags.token : null
-    let port = flags.port || 8005
-    let urlPath = `https://codepen.io/valgaze/full/PoEpxpb`
+    let urlPath = 'https://codepen.io/valgaze/full/PoEpxpb'
 
     if (!token) {
       token = await CliUx.ux.prompt(

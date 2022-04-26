@@ -50,7 +50,7 @@ OUTPUT JSON:`
   public async translate(prompt: string): Promise<any> {
     const {endpoint, full_response} = this.APIConfig
     const result = await axios
-      .post(
+    .post(
         endpoint as string,
         {
           prompt,
@@ -61,12 +61,12 @@ OUTPUT JSON:`
             Authorization: `Bearer ${this.token}`,
           },
         },
-      )
-      .catch((e) => {
-        if (e.response && e.response.status === 401 && e.response.data) {
-          console.log(`\n\n<YOUR CREDENTIAL IS LIKELY INVALID>\n\n`)
-        }
-      })
+    )
+    .catch(error => {
+      if (error.response && error.response.status === 401 && error.response.data) {
+        console.log('\n\n<YOUR CREDENTIAL IS LIKELY INVALID>\n\n')
+      }
+    })
 
     return result
   }

@@ -1,6 +1,6 @@
 import {Flags, CliUx} from '@oclif/core'
 import {CommonFlags, argvParser} from './../../util/common'
-import {client, good, bad} from './../../util/common'
+import {client, bad} from './../../util/common'
 import Command from '../../base'
 import {i18n} from './../../i18n'
 
@@ -60,7 +60,6 @@ export default class Webhook extends Command<typeof Command.flags> {
 
   async run(): Promise<void> {
     const {args, flags} = await this.parse(Webhook)
-    const {file} = args
     let webhookUrl = flags.webhookUrl
     let token = flags.token ? flags.token : null
 
@@ -72,16 +71,18 @@ export default class Webhook extends Command<typeof Command.flags> {
         {required: true},
       )
     }
+
     const inst = client(token as string)
     if (args.action === 'list') {
       const list = await inst.getWebhooks()
       this.log(`\n\n## ${this.t('cli.webhook.currentWebhooks')} ## \n\n`)
-      if (list.data.items.length) {
+      if (list.data.items.length > 0) {
         this.log(JSON.stringify(list.data.items, null, 2))
       } else {
         this.log('this.cli.webhook.nowebhooks')
       }
     }
+
     if (args.action === 'remove') {
       if (!webhookUrl) {
         if (!flags.forceDelete) {
@@ -111,19 +112,20 @@ export default class Webhook extends Command<typeof Command.flags> {
         )
         webhookUrl = ans as string
       }
+
       if (webhookUrl) {
         await inst
           .Setup(webhookUrl)
           .then((_) => {
             this.log(this.t('cli.webhook.success'))
           })
-          .catch((e) => {
-            if (e.response?.status === 409) {
+          .catch((error) => {
+            if (error.response?.status === 409) {
               bad(
                 this.t('cli.webhook.errors.existingwebhook', {url: webhookUrl}),
               )
             } else {
-              bad(e.response)
+              bad(error.response)
             }
           })
       }

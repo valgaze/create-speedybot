@@ -2,16 +2,16 @@ export default {
   globals: {
     flags: {
       lang: {
-        description: `Einstellen der Sprache, ex: $[languages]`,
+        description: 'Einstellen der Sprache, ex: $[languages]',
       },
     },
   },
   repos: {
-    ['speedybot-starter']: {
+    'speedybot-starter': {
       url: 'http://www.com',
       description: '🚀 speedybot-starter (standard)',
     },
-    ['speedybot-superpowers']: {
+    'speedybot-superpowers': {
       url: 'http://www.com',
       description:
         '🌟 speedybot-superpowers (gib deinem Bot $uperpowers wie z.B. *.xlsx-Verarbeitung)',

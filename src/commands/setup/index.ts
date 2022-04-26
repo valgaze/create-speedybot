@@ -1,7 +1,6 @@
 import {Flags, CliUx} from '@oclif/core'
 import {CommonFlags, argvParser} from '../../util/common'
 import Command from '../../base'
-import {client, good, bad} from '../../util/common'
 import inquirer from 'inquirer'
 import {i18n} from '../../i18n'
 import repos, {Repo, RepoHelper} from './../../util/repos/'
@@ -72,7 +71,7 @@ export default class Setup extends Command<typeof Command.flags> {
     } else {
       const valid = Object.values(repos).map((repo) => repo.keyword)
       if (!valid.includes(repo)) {
-        this.log(`\${valid.join(', ')}\n`)
+        this.log("${valid.join(', ')}\n")
         this.error(this.t('cli.setup.flags.repo.error', {repo}))
       }
     }

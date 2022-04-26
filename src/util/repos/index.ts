@@ -47,20 +47,22 @@ export class RepoHelper {
     ): string => {
       if (!utterance.includes(`$[${target}]`)) {
         return utterance
-      } else {
-        return replacer(
-          utterance.replace(`$[${target}]`, replacement),
-          target,
-          replacement,
-        )
       }
+
+      return replacer(
+        utterance.replace(`$[${target}]`, replacement),
+        target,
+        replacement,
+      )
     }
-    for (let key in template) {
+
+    for (const key in template) {
       const val = template[key]
       if (val) {
         payload = replacer(payload, key, val)
       }
     }
+
     return payload
   }
 
@@ -75,15 +77,13 @@ export class RepoHelper {
   }
 
   public async runSteps(steps: string[]): Promise<void> {
-    for (let i = 0; i < steps.length; i++) {
-      const cmd = steps[i]
+    for (const [i, cmd] of steps.entries()) {
       if (i > 0) {
         this.cwd = this.config.targetDir as string
       }
+
       const isSpecial =
         this.specials.findIndex((test) => cmd.includes(test)) > -1
-          ? true
-          : false
       if (isSpecial) {
         await this._Special(cmd)
       } else {
@@ -93,11 +93,9 @@ export class RepoHelper {
   }
 
   private async _Special(command: string) {
-    if (command.includes('<@write_token>')) {
-      if (this.config.token) {
-        await this.writeCJSON({token: this.config.token})
-        this.cwd = this.config.targetDir
-      }
+    if (command.includes('<@write_token>') && this.config.token) {
+      await this.writeCJSON({token: this.config.token})
+      this.cwd = this.config.targetDir
     }
 
     if (command.includes('<@remark>')) {
@@ -105,12 +103,10 @@ export class RepoHelper {
       this.log(cmd)
     }
 
-    if (command.includes('<@if_token>')) {
-      if (this.config.token) {
-        const cmd = command.replace('<@if_token>', '')
-        if (cmd.length) {
-          await this.run(cmd)
-        }
+    if (command.includes('<@if_token>') && this.config.token) {
+      const cmd = command.replace('<@if_token>', '')
+      if (cmd.length > 0) {
+        await this.run(cmd)
       }
     }
   }
@@ -177,7 +173,7 @@ const repos: Repo[] = [
     boot: [
       'git clone $[url] $[targetDir]',
       'npm i',
-      `npm run info || echo 'Install serverless, ex: $ npm i serverless'`,
+      "npm run info || echo 'Install serverless, ex: $ npm i serverless'",
       '<@remark>Install AWS tokens + serverless, quickstart here: https://github.com/valgaze/speedybot-serverless-experiment/blob/master/README.md',
     ],
   },
