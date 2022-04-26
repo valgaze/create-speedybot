@@ -10,6 +10,7 @@ export const serveUi = async (filePath: string, port = 8005) => {
             res.end(JSON.stringify(err))
             return
           }
+
           res.writeHead(200)
           res.end(data)
           return true

@@ -61,6 +61,7 @@ class YoloTranslate {
     if (languageOverride) {
       this.setLanguage(languageOverride)
     }
+
     const msg = _.get(this.language, input, null)
     if (!msg) {
       if (!fallback) {
@@ -68,16 +69,16 @@ class YoloTranslate {
           `🚨🚨 There was a problem with this translation look-up: '${input}'`,
         )
         return `${input}`
-      } else {
-        return fallback
       }
-    } else {
-      if (returnRaw) {
-        return msg
-      } else {
-        return this.fillTemplate(msg, template)
-      }
+
+      return fallback
     }
+
+    if (returnRaw) {
+      return msg
+    }
+
+    return this.fillTemplate(msg, template)
   }
 
   public setFallback(fallback: string) {
@@ -89,11 +90,12 @@ class YoloTranslate {
     template: {[key: string]: any},
   ): string {
     let payload: string
-    if (typeof utterances != 'string') {
+    if (typeof utterances !== 'string') {
       payload = pickRandom(utterances) || ''
     } else {
       payload = utterances
     }
+
     const replacer = (
       utterance: string,
       target: string,
@@ -101,18 +103,20 @@ class YoloTranslate {
     ): string => {
       if (!utterance.includes(`$[${target}]`)) {
         return utterance
-      } else {
-        return replacer(
-          utterance.replace(`$[${target}]`, replacement),
-          target,
-          replacement,
-        )
       }
+
+      return replacer(
+        utterance.replace(`$[${target}]`, replacement),
+        target,
+        replacement,
+      )
     }
-    for (let key in template) {
+
+    for (const key in template) {
       const val = template[key]
       payload = replacer(payload, key, val)
     }
+
     return payload
   }
 
@@ -123,8 +127,9 @@ class YoloTranslate {
   }
 }
 
-export const i18n = (defaultLanguage: string = 'en') => {
+export const i18n = (defaultLanguage = 'en') => {
   const inst = new YoloTranslate({locales, defaultLanguage})
   return inst
 }
+
 export default i18n

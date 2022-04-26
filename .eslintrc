@@ -1,6 +1,35 @@
 {
   "extends": ["oclif", "oclif-typescript"],
   "rules": {
-    "unicorn/prefer-ternary": false
+    "unicorn/prefer-ternary": 0,
+    "camelcase": 0,
+    "no-useless-constructor": 0,
+    "no-warning-comments": 0,
+    "node/no-extraneous-import": 0,
+    "no-await-in-loop": 0,
+    "arrow-parens": 0,
+    "prefer-spread": 0,
+    "guard-for-in": 0,
+    "no-promise-executor-return": 0,
+    "unicorn/prefer-node-protocol": 0,
+    "eqeqeq": 0,
+    "no-eq-null": 0,
+    "prefer-rest-params": 0,
+    "no-self-compare": 0,
+    "@typescript-eslint/ban-ts-comment": 0,
+    "@typescript-eslint/no-empty-function": 0,
+    "no-var": 0,
+    "@typescript-eslint/ban-types": 0,
+    "no-template-curly-in-string": 0,
+    "no-negated-condition": 0,
+    "unicorn/consistent-destructuring": 0,
+    "no-new-object": 0,
+    "new-cap": 0,
+    "default-param-last": 0,
+    "unicorn/import-style": 0,
+    "indent": 0,
+    "@typescript-eslint/no-unused-vars": 0,
+    "no-new-func": 0,
+    "no-unsafe-optional-chaining": 0
   }
 }

@@ -10,7 +10,7 @@ export default {
         description: 'What is your bot token? (Make one here: $[url])',
       },
       lang: {
-        description: `Set the language, ex $[languages]`,
+        description: 'Set the language, ex $[languages]',
       },
       port: {
         description: 'Set the port you want to use, ex 8000',

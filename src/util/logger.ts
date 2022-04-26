@@ -12,9 +12,9 @@ export function warning(...payload: any[]) {
 }
 
 export function bad(...payload: any[]) {
-  log(color.red(`\n\n# ---------------- 🚨 🚨 🚨 ------------------- #\n\n`))
+  log(color.red('\n\n# ---------------- 🚨 🚨 🚨 ------------------- #\n\n'))
   log(color.red(...payload))
-  log(color.red(`\n\n# ---------------- 🚨 🚨 🚨 ------------------- #\n\n`))
+  log(color.red('\n\n# ---------------- 🚨 🚨 🚨 ------------------- #\n\n'))
 }
 
 export function good(...payload: any[]) {
@@ -27,6 +27,7 @@ export const ascii_art = (colorChoice?: string) => {
     const opts = ['red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white']
     colorFallback = pickRandom(opts)
   }
+
   type Augment = {
     red: (_: string) => void
     green: (_: string) => void
@@ -79,7 +80,7 @@ export const ascii_art = (colorChoice?: string) => {
   log(colorize(logo))
 }
 
-export const startFlash = (speed: number = 25) => {
+export const startFlash = (speed = 25) => {
   const intervalRef = setInterval(() => {
     ascii_art()
   }, speed)

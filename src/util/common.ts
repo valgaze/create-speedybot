@@ -57,14 +57,13 @@ export function argvParser(targets: string[]): string {
 
   let targetIndex = -1
   let variantIndex = -1
-  for (let i = 0; i < targets.length; i++) {
-    const target = targets[i]
-    variants.forEach((variant, idx) => {
+  for (const [i, target] of targets.entries()) {
+    for (const [idx, variant] of variants.entries()) {
       if (target.includes(variant)) {
         targetIndex = i
         variantIndex = idx
       }
-    })
+    }
   }
 
   if (targetIndex > -1) {
@@ -101,11 +100,11 @@ const runSync = (cmd: string) =>
 export const menuHandler = async (action: string, flags: {port?: any} = {}) => {
   const oneOf = (choices: string[]) => choices.includes(action?.toLowerCase())
   if (action === 'setup') {
-    runSync(`npm init speedybot setup`)
+    runSync('npm init speedybot setup')
   }
 
   if (oneOf(['debug', 'info', 'bongo'])) {
-    runSync(`npx envinfo`)
+    runSync('npx envinfo')
   }
 
   if (action === 'tunnel') {
@@ -113,27 +112,28 @@ export const menuHandler = async (action: string, flags: {port?: any} = {}) => {
     if (!flags.port) {
       portNum = await CliUx.ux.prompt('Which port do you want to tunnel?')
     }
+
     runSync(`npx speedyhelper tunnel ${portNum}`)
   }
 
   if (oneOf(['web', 'ui'])) {
-    runSync(`npm init speedybot web`)
+    runSync('npm init speedybot web')
   }
 
   if (action === 'token') {
-    runSync(`npm init speedybot token`)
+    runSync('npm init speedybot token')
   }
 
   if (action === 'webhook:create') {
-    runSync(`npm init speedybot webhook create`)
+    runSync('npm init speedybot webhook create')
   }
 
   if (action === 'webhook:remove') {
-    runSync(`npm init speedybot webhook remove`)
+    runSync('npm init speedybot webhook remove')
   }
 
   if (action === 'webhook:list') {
-    runSync(`npm init speedybot webhook list`)
+    runSync('npm init speedybot webhook list')
   }
 
   if (action === 'tellmemore') {
@@ -194,5 +194,6 @@ export const extractURL = async (fileName = 'serverless.yml') => {
   } else {
     return ''
   }
+
   return url
 }

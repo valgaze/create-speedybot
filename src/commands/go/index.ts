@@ -40,6 +40,7 @@ export default class Go extends Command<typeof Command.flags> {
       ])
       action = res.action
     }
+
     menuHandler(action)
   }
 }

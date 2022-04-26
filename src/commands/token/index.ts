@@ -1,5 +1,5 @@
 import {Flags, CliUx} from '@oclif/core'
-import {client, good, bad, CommonFlags, argvParser} from './../../util/common'
+import {client, bad, CommonFlags, argvParser} from './../../util/common'
 import Command from '../../base'
 import {i18n} from './../../i18n'
 
@@ -14,11 +14,12 @@ export default class Token extends Command<typeof Command.flags> {
   static description = i18n(earlyFlag).t('cli.token.description')
 
   static examples = [
-    `$ npm init speedybot token`,
-    `$ npm init speedybot token aaa-bbb-cccf-ddd-eee`,
-    `$ npm init speedybot token --token=aaa-bbb-cccf-ddd-eee`,
-    `$ npm init speedybot token -t=aaa-bbb-cccf-ddd-eee`,
+    '$ npm init speedybot token',
+    '$ npm init speedybot token aaa-bbb-cccf-ddd-eee',
+    '$ npm init speedybot token --token=aaa-bbb-cccf-ddd-eee',
+    '$ npm init speedybot token -t=aaa-bbb-cccf-ddd-eee',
   ]
+
   static args = [{name: 'token'}]
   static flags = {
     token: Flags.string({
@@ -31,6 +32,7 @@ export default class Token extends Command<typeof Command.flags> {
     }),
     ...CommonFlags,
   }
+
   async run(): Promise<void> {
     const {args, flags} = await this.parse(Token)
     let token = flags.token ? flags.token : args.token
@@ -69,8 +71,8 @@ export default class Token extends Command<typeof Command.flags> {
         },
       })
       console.log(JSON.stringify(res.data, null, 2))
-    } catch (e: any) {
-      const {response} = e
+    } catch (error: any) {
+      const {response} = error
       bad(response.status === 401 ? this.t('cli.token.errors.invalid') : 'm')
     }
   }
