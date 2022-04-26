@@ -17,6 +17,8 @@ type noOp = (
   input: string,
   template?: object,
   languageOverride?: string,
+  fallback?: string,
+  returnRaw?: boolean,
 ) => string
 export default abstract class BaseCommand<
   T extends typeof BaseCommand.flags,
@@ -25,6 +27,8 @@ export default abstract class BaseCommand<
     input: string,
     template?: object,
     languageOverride?: string,
+    fallback?: string,
+    returnRaw?: boolean,
   ): string => ''
 
   static flags = {

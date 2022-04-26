@@ -56,6 +56,7 @@ class YoloTranslate {
     template: object = {},
     languageOverride?: string,
     fallback?: string,
+    returnRaw = false,
   ): string | string[] | T {
     if (languageOverride) {
       this.setLanguage(languageOverride)
@@ -71,7 +72,11 @@ class YoloTranslate {
         return fallback
       }
     } else {
-      return this.fillTemplate(msg, template)
+      if (returnRaw) {
+        return msg
+      } else {
+        return this.fillTemplate(msg, template)
+      }
     }
   }
 
