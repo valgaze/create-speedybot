@@ -79,7 +79,7 @@ export default class Webhook extends Command<typeof Command.flags> {
       if (list.data.items.length > 0) {
         this.log(JSON.stringify(list.data.items, null, 2))
       } else {
-        this.log('this.cli.webhook.nowebhooks')
+        this.log('cli.webhook.nowebhooks')
       }
     }
 
