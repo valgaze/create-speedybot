@@ -30,6 +30,7 @@
     "indent": 0,
     "@typescript-eslint/no-unused-vars": 0,
     "no-new-func": 0,
-    "no-unsafe-optional-chaining": 0
+    "no-unsafe-optional-chaining": 0,
+    "unicorn/filename-case": 0
   }
 }

@@ -77,7 +77,8 @@ export default {
       ],
     },
     web: {
-      description: 'Browser-based interfact',
+      description:
+        'Browser-based interface (human handoff, send Adaptive Cards, etc)',
       lingerMessage: 'Opening site available below (press any key to exit)',
       flags: {
         port: {
@@ -113,6 +114,10 @@ export default {
         forceDelete: {
           description:
             'If set, will not prompt to proceed and will auto delete ALL webhooks currently associated with a token',
+        },
+        secret: {
+          description:
+            'Secret value for webhooks, you must parse the response & compare values, see more here: https://developer.webex.com/blog/using-a-webhook-secret',
         },
       },
       success:
