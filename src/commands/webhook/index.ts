@@ -52,9 +52,40 @@ export default class Webhook extends Command<typeof Command.flags> {
         i18n(earlyFlag).t('cli.webhook.flags.forceDelete.description'),
       ),
     }),
+    secret: Flags.string({
+      char: 's',
+      description: String(
+        i18n(earlyFlag).t('cli.webhook.flags.secret.description'),
+      ),
+    }),
     ...CommonFlags,
   }
 
+  /**
+   * Webhook secret parsing: bit of a nightmare
+   // https://developer.webex.com/blog/using-a-webhook-secret
+   // https://github.com/WebexSamples/webex-node-bot-framework/blob/39324f3f23face40c80bcec9ab589677f0bf431a/lib/webhook.js#L43-L52
+   ```ts
+
+    /**
+     * signature: xxxaaabbbcccdef
+     * secret: mysecret
+     * requestBody: {id: 'Y2aaabbbcc', name:'blabhblah', data: { roomId: 'aaa', personId: 'bb' } 
+     * *
+    const crypto = require('crypto');
+    const validate = (signature, requestBody, secret) => {
+      const hmac = crypto.createHmac('sha1', secret);
+      if (typeof requestBody === 'string') {
+        hmac.update(requestBody);
+      } else {
+        hmac.update(JSON.stringify(requestBody));
+      }
+
+      const isValid = hmac.digest('hex') == signature;
+      return isValid;
+    }
+  ```
+  **/
   // ex. $ npm init speedybot webhook delete (action = remove/list/register)
   static args = [{name: 'action'}]
 
@@ -62,6 +93,7 @@ export default class Webhook extends Command<typeof Command.flags> {
     const {args, flags} = await this.parse(Webhook)
     let webhookUrl = flags.webhookUrl
     let token = flags.token ? flags.token : null
+    const secret = flags.secret ? flags.secret : undefined
 
     if (!token) {
       token = await CliUx.ux.prompt(
@@ -79,7 +111,7 @@ export default class Webhook extends Command<typeof Command.flags> {
       if (list.data.items.length > 0) {
         this.log(JSON.stringify(list.data.items, null, 2))
       } else {
-        this.log('cli.webhook.nowebhooks')
+        this.log(this.t('cli.webhook.nowebhooks'))
       }
     }
 
@@ -115,7 +147,7 @@ export default class Webhook extends Command<typeof Command.flags> {
 
       if (webhookUrl) {
         await inst
-          .Setup(webhookUrl)
+          .Setup(webhookUrl, secret)
           .then((_) => {
             this.log(this.t('cli.webhook.success'))
           })
