@@ -1,6 +1,6 @@
 import {Flags, CliUx} from '@oclif/core'
 import {CommonFlags, argvParser} from './../../util/common'
-import {client, bad} from './../../util/common'
+import {WebhookClient, bad} from './../../util/common'
 import Command from '../../base'
 import {i18n} from './../../i18n'
 
@@ -104,25 +104,30 @@ export default class Webhook extends Command<typeof Command.flags> {
       )
     }
 
-    const inst = client(token as string)
+    const inst = WebhookClient(token as string)
     if (args.action === 'list') {
       const list = await inst.getWebhooks()
-      this.log(`\n\n## ${this.t('cli.webhook.currentWebhooks')} ## \n\n`)
-      if (list.data.items.length > 0) {
+      if (list && list.data.items.length > 0) {
+        this.log(`\n\n## ${this.t('cli.webhook.currentWebhooks')} ## \n\n`)
         this.log(JSON.stringify(list.data.items, null, 2))
       } else {
         this.log(this.t('cli.webhook.nowebhooks'))
       }
     }
 
-    if (args.action === 'remove') {
+    if (args.action === 'remove' || args.action === 'delete') {
       if (!webhookUrl) {
         if (!flags.forceDelete) {
           const proceed = await CliUx.ux.confirm(this.t('cli.webhook.warning'))
           if (proceed) {
             const list = await inst.getWebhooks()
-            await inst.killAllWebhooks(list.data.items)
-            this.log(this.t('cli.webhook.deletesuccess'))
+            // eslint-disable-next-line max-depth
+            if (list) {
+              await inst.killAllWebhooks(list.data.items)
+              this.log(this.t('cli.webhook.deletesuccess'))
+            } else {
+              this.log(this.t('cli.webhook.nowebhooks'))
+            }
           } else {
             this.log(this.t('cli.webhook.exiting'))
           }
@@ -157,7 +162,7 @@ export default class Webhook extends Command<typeof Command.flags> {
                 this.t('cli.webhook.errors.existingwebhook', {url: webhookUrl}),
               )
             } else {
-              bad(error.response)
+              bad(this.t('globals.errors.invalid_token'))
             }
           })
       }
