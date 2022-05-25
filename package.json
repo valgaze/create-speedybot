@@ -1,6 +1,6 @@
 {
   "name": "create-speedybot",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Low-dependency scaffolder for speedybot conversation projects",
   "author": " @valgaze",
   "bin": {

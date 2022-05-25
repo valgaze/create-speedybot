@@ -16,6 +16,10 @@ export default {
         description: 'Set the port you want to use, ex 8000',
       },
     },
+    errors: {
+      invalid_token: 'It appears the token you provided is invalid',
+      not_bot: 'ATTENTION: this token does not appear associated with a bot',
+    },
   },
   cli: {
     go: {

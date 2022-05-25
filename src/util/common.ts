@@ -7,6 +7,8 @@ import {i18n} from './../i18n'
 import {resolve} from 'path'
 import {stat} from 'fs'
 import {ascii_art} from './logger'
+import {Webhooker} from './webhooker'
+
 export * from './logger'
 
 const fileExists = (filePath: string) => {
@@ -43,7 +45,7 @@ export const CommonFlags = {
 }
 
 export const client = (token: string) => new SpeedybotMini(token)
-
+export const WebhookClient = (token: string) => new Webhooker(token)
 // HACK HACK HACK: need -l/-lang flags for static methods (ie before class initalizes)
 // So jumping right into process.argv
 export function argvParser(targets: string[]): string {
