@@ -1,6 +1,11 @@
-import {Flags, CliUx} from '@oclif/core'
-import {client, bad, CommonFlags, argvParser} from './../../util/common'
-import Command from '../../base'
+import {Flags, CliUx, Command} from '@oclif/core'
+import {
+  client,
+  bad,
+  CommonFlags,
+  argvParser,
+  noOpFunction,
+} from './../../util/common'
 import {i18n} from './../../i18n'
 
 /**
@@ -10,7 +15,17 @@ import {i18n} from './../../i18n'
  */
 
 const earlyFlag = argvParser(process.argv) || ''
-export default class Token extends Command<typeof Command.flags> {
+export default class Token extends Command {
+  public t: Function = noOpFunction
+
+  async init(): Promise<void> {
+    // do some initialization
+    const output = await this.parse(this.ctor)
+    const {flags} = output
+    const {lang} = flags
+    const inst = i18n(lang)
+    this.t = inst.t.bind(inst) as Function
+  }
   static description = i18n(earlyFlag).t('cli.token.description')
 
   static examples = [

@@ -1,11 +1,26 @@
-import {Flags, CliUx} from '@oclif/core'
-import {CommonFlags, argvParser, ascii_art} from './../../util/common'
-import Command from '../../base'
+import {Flags, CliUx, Command} from '@oclif/core'
+import {
+  CommonFlags,
+  argvParser,
+  ascii_art,
+  noOpFunction,
+} from './../../util/common'
 import {i18n} from './../../i18n'
 
 const earlyFlag = argvParser(process.argv) || ''
 
-export default class Web extends Command<typeof Command.flags> {
+export default class Web extends Command {
+  public t: Function = noOpFunction
+
+  async init(): Promise<void> {
+    // do some initialization
+    const output = await this.parse(this.ctor)
+    const {flags} = output
+    const {lang} = flags
+    const inst = i18n(lang)
+    this.t = inst.t.bind(inst) as Function
+  }
+
   static description = i18n(earlyFlag).t('cli.web.description')
   static examples = ['$ npm init speedybot web']
 

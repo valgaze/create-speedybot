@@ -1,8 +1,8 @@
-import {Flags, CliUx} from '@oclif/core'
-import {CommonFlags, argvParser} from './../../util/common'
+import {Flags, CliUx, Command} from '@oclif/core'
+import {CommonFlags, argvParser, noOp, noOpFunction} from './../../util/common'
 import {WebhookClient, bad} from './../../util/common'
-import Command from '../../base'
 import {i18n} from './../../i18n'
+import {ArgInput, OutputArgs} from '@oclif/core/lib/interfaces'
 
 /**
  *
@@ -20,7 +20,18 @@ export interface WebhookConfig {
 
 const earlyFlag = argvParser(process.argv) || ''
 
-export default class Webhook extends Command<typeof Command.flags> {
+export default class Webhook extends Command {
+  public t: Function = noOpFunction
+
+  async init(): Promise<void> {
+    // do some initialization
+    const output = await this.parse(this.ctor)
+    const {flags} = output
+    const {lang} = flags
+    const inst = i18n(lang)
+    this.t = inst.t.bind(inst) as Function
+  }
+
   static description = i18n(earlyFlag).t('cli.webhook.description')
   static examples = [
     '$ npm init speedybot webhoook',
@@ -70,7 +81,7 @@ export default class Webhook extends Command<typeof Command.flags> {
     /**
      * signature: xxxaaabbbcccdef
      * secret: mysecret
-     * requestBody: {id: 'Y2aaabbbcc', name:'blabhblah', data: { roomId: 'aaa', personId: 'bb' } 
+     * requestBody: {id: 'Y2aaabbbcc', name:'blabhblah', data: { roomId: 'aaa', personId: 'bb' }
      * *
     const crypto = require('crypto');
     const validate = (signature, requestBody, secret) => {
@@ -84,7 +95,7 @@ export default class Webhook extends Command<typeof Command.flags> {
       const isValid = hmac.digest('hex') == signature;
       return isValid;
     }
-  ```
+  ```https://speedybot-hub.valgaze.workers.dev/beer
   **/
   // ex. $ npm init speedybot webhook delete (action = remove/list/register)
   static args = [{name: 'action'}]

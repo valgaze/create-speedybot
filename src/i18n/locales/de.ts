@@ -3,18 +3,23 @@
 export default {
   globals: {
     prompts: {
-      token: '[german]]What is your bot token? (Make one here: $[url])',
+      token: '[German] What is your bot token? (Make one here: $[url])',
     },
     flags: {
       token: {
-        description: '[german]]What is your bot token? (Make one here: $[url])',
+        description: '[German] What is your bot token? (Make one here: $[url])',
       },
       lang: {
-        description: '[german]]Set the language, ex $[languages]',
+        description: '[German] Set the language, ex $[languages]',
       },
       port: {
-        description: '[german]]Set the port you want to use, ex 8000',
+        description: '[German] Set the port you want to use, ex 8000',
       },
+    },
+    errors: {
+      invalid_token: '[German] It appears the token you provided is invalid',
+      not_bot:
+        '[German] ATTENTION: this token does not appear associated with a bot',
     },
   },
   cli: {
@@ -95,25 +100,29 @@ export default {
         'Create, destroy, read, modify deployed webhook (esp useful for serverless/ephemeral compute)',
       warning:
         'Without specifying a webhook -w, this will destroy ALL webhooks associated with the token provided. Proceed?',
-      deletesuccess: 'Your webhooks have been removed',
+      deletesuccess: '[German] Your webhooks have been removed',
       deleteacknowledge:
         "Attempted to remove webhooks associated with '$[webhookUrl]'",
       nowebhooks:
         'No webhooks registered, see $ npm init speedybot webhook list',
       exiting: 'Ok, exiting...',
-      currentWebhooks: 'Your current webhooks',
+      currentWebhooks: '[German] Your current webhooks',
       flags: {
         token: {
           description: "Your bot's access token",
         },
         webhookUrl: {
-          description: 'Publically accessible url for your service',
+          description: '[German] Publically accessible url for your service',
           prompt:
-            'What is your webhook url? (Must be accessible from public internet)',
+            '[German] What is your webhook url? (Must be accessible from public internet)',
         },
         forceDelete: {
           description:
-            'If set, will not prompt to proceed and will auto delete ALL webhooks currently associated with a token',
+            '[German]If set, will not prompt to proceed and will auto delete ALL webhooks currently associated with a token',
+        },
+        secret: {
+          description:
+            '[German] Secret value for webhooks, you must parse the response & compare values, see more here: https://developer.webex.com/blog/using-a-webhook-secret',
         },
       },
       success:

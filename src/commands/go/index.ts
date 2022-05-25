@@ -4,13 +4,25 @@ import {
   argvParser,
   ascii_art,
   menuHandler,
+  noOpFunction,
 } from './../../util/common'
-import Command from '../../base'
+import {Command} from '@oclif/core'
 import {i18n} from './../../i18n'
 import inquirer from 'inquirer'
 const earlyFlag = argvParser(process.argv) || ''
 
-export default class Go extends Command<typeof Command.flags> {
+export default class Go extends Command {
+  public t: Function = noOpFunction
+
+  async init(): Promise<void> {
+    // do some initialization
+    const output = await this.parse(this.ctor)
+    const {flags} = output
+    const {lang} = flags
+    const inst = i18n(lang)
+    this.t = inst.t.bind(inst) as Function
+  }
+
   static description = i18n(earlyFlag).t('cli.go.description')
   static examples = ['$ npm init speedybot go']
 

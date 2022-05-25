@@ -8,6 +8,22 @@ import {resolve} from 'path'
 import {stat} from 'fs'
 import {ascii_art} from './logger'
 import {Webhooker} from './webhooker'
+export type noOp = (
+  input: string,
+  template?: object,
+  languageOverride?: string,
+  fallback?: string,
+  returnRaw?: boolean,
+) => string
+
+export const noOpFunction = (
+  input: string,
+  template?: object,
+  languageOverride?: string,
+  fallback?: string,
+  returnRaw?: boolean,
+  // eslint-disable-next-line max-params
+): string => ''
 
 export * from './logger'
 
