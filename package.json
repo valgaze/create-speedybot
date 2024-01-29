@@ -4,6 +4,7 @@
     "create-speedybot": "./bin/run.js"
   },
   "dependencies": {
+    "@clack/prompts": "^0.7.0",
     "@oclif/core": "^3",
     "@oclif/plugin-help": "^6",
     "@oclif/plugin-plugins": "^4",
@@ -48,12 +49,7 @@
       "@oclif/plugin-help",
       "@oclif/plugin-plugins"
     ],
-    "topicSeparator": " ",
-    "topics": {
-      "hello": {
-        "description": "Say hello to the world and others"
-      }
-    }
+    "topicSeparator": " "
   },
   "repository": "valgaze/create-speedybot",
   "scripts": {
@@ -67,7 +63,7 @@
     "version": "oclif readme && git add README.md",
     "publish:beta": "npm run build && npm publish --tag beta"
   },
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0",
   "bugs": "https://github.com/valgaze/create-speedybot/issues",
   "keywords": [
     "oclif"
