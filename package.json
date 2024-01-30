@@ -63,7 +63,7 @@
     "version": "oclif readme && git add README.md",
     "publish:beta": "npm run build && npm publish --tag beta"
   },
-  "version": "2.0.0",
+  "version": "2.0.1",
   "bugs": "https://github.com/valgaze/create-speedybot/issues",
   "keywords": [
     "oclif"

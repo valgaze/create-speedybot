@@ -1,8 +1,20 @@
+/* eslint-disable no-await-in-loop */
+/* eslint-disable complexity */
 import {select, text} from '@clack/prompts'
 import {Command, Flags} from '@oclif/core'
 import {SpeedyBot, botTokenKey, logoRoll} from 'speedybot'
 
-import {botData, colorLogo, getCurrentPath, getProject, projectList, runCommands, writeEnvFile} from './../helpers'
+import {
+  botData,
+  colorLogo,
+  envDesc,
+  getBotToken,
+  getCurrentPath,
+  getProject,
+  projectList,
+  runCommands,
+  writeEnvFile,
+} from './../helpers'
 
 export default class Setup extends Command {
   static description = 'Reveal information about a supplied token'
@@ -12,9 +24,27 @@ export default class Setup extends Command {
   ]
 
   static flags = {
+    boot: Flags.boolean({
+      char: 'b',
+      dependsOn: ['install'],
+      description: 'Run the boot command',
+    }),
+    debug: Flags.boolean({
+      description: 'Show expanded logs',
+    }),
     directory: Flags.string({
       char: 'd',
-      description: 'Target directory where project will live (based on current directory)',
+      description: 'Target directory where project will live (based on where command was run)',
+    }),
+    env: Flags.string({
+      char: 'e',
+      description: 'Variables to write to .env (will be prompted + mandatory if set)',
+      multiple: true,
+    }),
+    install: Flags.boolean({
+      aliases: ['installDeps'],
+      char: 'i',
+      description: 'Attempt to install dependencies (npm i)',
     }),
     noLogo: Flags.boolean({
       char: 'n',
@@ -35,30 +65,43 @@ export default class Setup extends Command {
 
   public async run(): Promise<void> {
     const {flags} = await this.parse(Setup)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const debug = (...payload: any[]): void => {
+      if (flags.debug) {
+        console.log(...payload)
+      }
+    }
+
     if (!flags.noLogo) {
       this.log(colorLogo(logoRoll()))
     }
 
+    let envs = flags.env || []
     let token = flags.token || ''
 
-    if (!token && flags.project === 'default') {
-      token = (await text({
-        message: `Enter a WebEx bot access token (if you don't have one, make a new one here: https://developer.webex.com/my-apps/new/bot`,
-        placeholder: '2kD2rqamZqbmphaulqYrV...',
-        validate(value) {
-          if (value.length < 10) return `A real token is longer`
-        },
-      })) as string
+    // Special handling for bot token
+    const isDefaultProject = flags.project === 'default'
+    const hasBotTokenKey = envs.includes(botTokenKey)
+
+    if ((!token && isDefaultProject) || (hasBotTokenKey && !token) || (flags.boot && !token)) {
+      token = await getBotToken()
+      if (hasBotTokenKey) {
+        envs = envs.filter((i) => i !== botTokenKey)
+      }
     }
 
+    debug('[Flags]:', flags)
+
     try {
-      const isValid = await this.BotInst.getSelf(token.trim()) // trim bc lots of people have newlines/spaces
-      const {displayName, emails, id, type} = isValid
-      const [email] = emails
-      botData.name = displayName
-      botData.email = email
-      botData.id = id
-      botData.type = type
+      if (token) {
+        const isValid = await this.BotInst.getSelf(token.trim()) // trim bc lots of people have newlines/spaces
+        const {displayName, emails, id, type} = isValid
+        const [email] = emails
+        botData.name = displayName
+        botData.email = email
+        botData.id = id
+        botData.type = type
+      }
     } catch {
       this.error(
         'Invalid WebEx token, double-check it or re-generate a token here: https://developer.webex.com/my-apps',
@@ -79,17 +122,22 @@ export default class Setup extends Command {
           {label: '🐣 Run a bot locally', value: 'speedybot-starter'},
           {hint: `You'll need to deploy this to use`, label: '🌐 Express Server', value: 'standard-server'},
           {hint: 'Serverless', label: '🔥 Worker', value: 'worker'},
+          {hint: 'LLM system', label: '📂 RAG with Voiceflow (file upload)', value: 'voiceflow-kb'},
+          {hint: 'NLU+LLM system', label: '🗣 Connect to Voiceflow', value: 'worker'},
         ],
       })) as string
     }
 
-    const project = flags.project === 'default' ? 'speedybot-starter' : flags.project
+    const project = isDefaultProject ? 'speedybot-starter' : flags.project
     const projectPayload = {
-      installDeps: flags.project === 'default',
-      project,
+      boot: flags.boot || isDefaultProject, // will attempt to launch w/ run-script
+      envs, // will each be prompted and written to env
+      installDeps: flags.project === 'default' || flags.install, // run install
+      project, // project name
       repositoryURL: 'https://github.com/valgaze/speedybot',
-      targetDirectory: flags.directory ?? project,
+      targetDirectory: flags.directory ?? project, // default to project name
     }
+    debug('[Project Config]', projectPayload)
     try {
       await getProject(
         projectPayload.repositoryURL,
@@ -97,22 +145,39 @@ export default class Setup extends Command {
         projectPayload.targetDirectory,
       )
 
-      if (flags.project === 'default' || projectPayload.installDeps) {
+      // Special handling w/ token to .env
+      if (token) {
         await writeEnvFile({[botTokenKey]: token}, {targetPath: getCurrentPath(projectPayload.project, '.env')})
-        await runCommands([`cd ${projectPayload.targetDirectory} && npm i`])
-        if (flags.project === 'default') {
-          await runCommands([`cd ${projectPayload.targetDirectory} && npm run bot:dev`])
+      }
+
+      // prompt + write any other .env's
+      for (const env of envs) {
+        let label = {message: `Enter a value for ${env}`}
+        if (envDesc[env]) {
+          label = envDesc[env]
         }
+
+        const tmpEnv = (await text(label)) as string
+        await writeEnvFile({[env]: tmpEnv}, {append: true, targetPath: getCurrentPath(projectPayload.project, '.env')})
+      }
+
+      if (flags.install) {
+        await runCommands([`cd ${projectPayload.targetDirectory} && npm i`])
+      }
+
+      if (flags.boot && token) {
+        await runCommands([`cd ${projectPayload.targetDirectory} && npm run bot:dev`])
+      } else {
+        this.log(`Your project is available here: ${getCurrentPath(projectPayload.targetDirectory)}
+    
+🤖 See the README to get up and running: ${getCurrentPath(getCurrentPath(projectPayload.targetDirectory), 'README.md')}
+        `)
       }
     } catch (error) {
-      this.log('There was an error setting up this project')
+      console.log(`❌[ERROR] There was an error setting up this project`)
       console.log(error)
       this.error(`See https://speedybot.js.org/examples/${projectPayload.project} for manual instructions`)
+      this.exit(1)
     }
-
-    this.log(`Your project is available here: ${getCurrentPath(projectPayload.targetDirectory)}
-    
-Read the README to get up and running: ${getCurrentPath(getCurrentPath(projectPayload.targetDirectory), 'README.md')}
-`)
   }
 }

@@ -5,9 +5,16 @@ import * as os from 'os'
 // eslint-disable-next-line unicorn/import-style
 import * as path from 'path'
 
-// type EXAMPLES = 'default' | 'deno' | 'lambda' | 'llm-stream' | 'speedybot-starter' | 'standard-server' | 'worker'
-
-export const projectList = ['deno', 'lambda', 'llm-stream', 'speedybot-starter', 'standard-server', 'worker']
+export const projectList = [
+  'deno',
+  'lambda',
+  'llm-stream',
+  'speedybot-starter',
+  'standard-server',
+  'worker',
+  'voiceflow',
+  'voiceflow-kb',
+]
 
 export type Color = 'blue' | 'cyan' | 'green' | 'magenta' | 'red' | 'white' | 'yellow'
 export type BackgroundColor = 'bgBlue' | 'bgCyan' | 'bgGreen' | 'bgMagenta' | 'bgRed' | 'bgWhite' | 'bgYellow'
@@ -32,7 +39,7 @@ const cloneRepository = async (repositoryURL: string, tempDir: string) => {
   try {
     const stdioOptions: ExecSyncOptions = isWindows ? {stdio: 'ignore'} : {stdio: 'inherit'}
     execSync(`git clone ${repositoryURL} ${tempDir}`, stdioOptions)
-  } catch (error) {
+  } catch {
     throw new Error('Error cloning repository')
   }
 }
@@ -47,6 +54,7 @@ export const runCommands = async (commands: string[]) => {
     }
   }
 }
+
 const copyProjectFolder = async (tempDir: string, sourcePath: string, targetDirName: string | null) => {
   const sourceFolderPath = path.join(tempDir, sourcePath)
   const destinationPath = path.join('./', targetDirName || path.basename(sourcePath))

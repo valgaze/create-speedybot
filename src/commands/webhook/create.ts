@@ -45,7 +45,7 @@ export default class WebhookCreate extends Command {
     let webhookUrl = flags.webhookUrl || ''
     if (!token) {
       token = (await text({
-        message: `Enter a WebEx bot access token (if you don't have one, make a new one here: https://developer.webex.com/my-apps/new/bot`,
+        message: `Enter a WebEx bot access token (if you don't have one, make a new one here: https://developer.webex.com/my-apps/new/bot)`,
         placeholder: '2kD2rqamZqbmphaulqYrV...',
         validate(value) {
           if (value.length < 10) return `A real token is longer`

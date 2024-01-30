@@ -1,6 +1,7 @@
 import {writeFile} from 'node:fs/promises'
 import {resolve} from 'node:path'
 import * as pc from 'picocolors' // node 14+
+import {TextOptions, text} from '@clack/prompts'
 
 export {getProject, projectList, runCommands} from './cloner'
 export const botData: {email: string; id: string; name: string; type: string} = {email: '', id: '', name: '', type: ''}
@@ -45,6 +46,28 @@ export async function writeEnvFile(
   } catch (error) {
     console.error('Error writing to .env:', error)
     // eslint-disable-next-line no-process-exit, unicorn/no-process-exit
-    process.exit(1)
+    process.exit(1) // catastrophic issues
   }
+}
+
+export async function getBotToken() {
+  return (await text({
+    message: `Enter a WebEx bot access token (if you don't have one, make a new one here: https://developer.webex.com/my-apps/new/bot)`,
+    placeholder: '2kD2rqamZqbmphaulqYrV...',
+    validate(value) {
+      if (value.length < 10) return `A real token is longer`
+    },
+  })) as string
+}
+
+export const envDesc: {[key: string]: TextOptions} = {
+  VOICEFLOW_API_KEY: {
+    message:
+      'Enter your Voiceflow API key (instructions on how to find one for your project: https://developer.voiceflow.com/docs/step-1-get-api-key)',
+    placeholder: 'Your API key...',
+    validate(value: string) {
+      if (value.length < 10) return 'A real API key is longer'
+    },
+  },
+  // Add more key-value pairs as needed
 }
