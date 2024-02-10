@@ -124,6 +124,7 @@ export default class Setup extends Command {
           {hint: 'Serverless', label: '🔥 Worker', value: 'worker'},
           {hint: 'LLM system', label: '📂 RAG with Voiceflow (file upload)', value: 'voiceflow-kb'},
           {hint: 'NLU+LLM system', label: '🗣 Connect to Voiceflow', value: 'worker'},
+          {hint: 'Ask for location', label: '🌎 Location Prompt', value: 'location'},
         ],
       })) as string
     }
