@@ -30,6 +30,10 @@ export default class Setup extends Command {
       dependsOn: ['install'],
       description: 'Run the boot command',
     }),
+    bun: Flags.boolean({
+      dependsOn: ['install'],
+      description: 'Use bun to install dependencies',
+    }),
     debug: Flags.boolean({
       description: 'Show expanded logs',
     }),
@@ -138,6 +142,7 @@ export default class Setup extends Command {
       project, // project name
       repositoryURL: 'https://github.com/valgaze/speedybot',
       targetDirectory: flags.directory ?? project, // default to project name
+      useBun: flags.bun ?? false,
     }
     debug('[Project Config]', projectPayload)
     try {
@@ -164,7 +169,9 @@ export default class Setup extends Command {
       }
 
       if (flags.install) {
-        await runCommands([`cd ${projectPayload.targetDirectory} && npm i`])
+        await runCommands([
+          `cd ${projectPayload.targetDirectory} && ${projectPayload.useBun ? 'bun install' : 'npm i'}`,
+        ])
       }
 
       this.log(`
