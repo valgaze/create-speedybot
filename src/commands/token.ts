@@ -7,8 +7,9 @@ import {botData, colorLogo} from './../helpers'
 export default class Token extends Command {
   static description = 'Reveal information about a supplied token'
   static examples = [
-    'npm init speedybot token',
-    'npm init speedybot token -t 2kD2rqamZqbmphaulqYrV5amVqu9WOq11Re6bWR9YiW5N9ybFkPnkaeRl5O7mRfIncSe6jaFNsKf6UJEoOZS6lnFJDOU25R3mrrq5uo',
+    'npm init speedybot@latest token -- --help',
+    'npx -y speedybot@latest token --help',
+    'npx -y speedybot@latest token -t 2kD2rqamZqbmphaulqYrV5amVqu9WOq11Re6bWR9YiW5N9ybFkPnkaeRl5O7mRfIncSe6jaFNsKf6UJEoOZS6lnFJDOU25R3mrrq5uo',
   ]
 
   static flags = {

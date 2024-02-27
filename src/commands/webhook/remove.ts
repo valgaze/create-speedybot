@@ -7,10 +7,9 @@ import {botData, colorLogo} from '../../helpers'
 export default class WebhookRemove extends Command {
   static description = 'Remove some or all webhooks associated with your bot'
   static examples = [
-    'npm init speedybot webhook remove',
-    'npm init speedybot webhook remove --all',
-    'npm init speedybot webhook remove -t 2kD2rqamZqbmphaulqYrV5amVqu9WOq11Re6bWR9YiW5N9ybFkPnkaeRl5O7mRfIncSe6jaFNsKf6UJEoOZS6lnFJDOU25R3mrrq5uo -w https://abcd123456.execute-api.us-east-1.amazonaws.com/speedybot',
-    'npm init speedybot webhook remove -t 2kD2rqamZqbmphaulqYrV5amVqu9WOq11Re6bWR9YiW5N9ybFkPnkaeRl5O7mRfIncSe6jaFNsKf6UJEoOZS6lnFJDOU25R3mrrq5uo -w https://abcd123456.execute-api.us-east-1.amazonaws.com/speedybot -s my_webhook_secret ',
+    'npx -y speedybot webook remove --help',
+    'npx -y speedybot webhook remove --all',
+    'npx -y speedybot webhook remove -t 2kD2rqamZqbmphaulqYrV5amVqu9WOq11Re6bWR9YiW5N9ybFkPnkaeRl5O7mRfIncSe6jaFNsKf6UJEoOZS6lnFJDOU25R3mrrq5uo -w https://abcd123456.execute-api.us-east-1.amazonaws.com/speedybot',
   ]
 
   static flags = {

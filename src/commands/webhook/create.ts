@@ -6,9 +6,9 @@ import {colorLogo} from '../../helpers'
 export default class WebhookCreate extends Command {
   static description = 'Create a new webhook for your bot'
   static examples = [
-    'npm init speedybot create webhook',
-    'npm init speedybot create webhook -t 2kD2rqamZqbmphaulqYrV5amVqu9WOq11Re6bWR9YiW5N9ybFkPnkaeRl5O7mRfIncSe6jaFNsKf6UJEoOZS6lnFJDOU25R3mrrq5uo -w https://abcd123456.execute-api.us-east-1.amazonaws.com/speedybot',
-    'npm init speedybot create webhook -t 2kD2rqamZqbmphaulqYrV5amVqu9WOq11Re6bWR9YiW5N9ybFkPnkaeRl5O7mRfIncSe6jaFNsKf6UJEoOZS6lnFJDOU25R3mrrq5uo -w https://abcd123456.execute-api.us-east-1.amazonaws.com/speedybot -s my_webhook_secret ',
+    'npx -y speedybot webhook create --help',
+    'npm init speedybot webhook create',
+    'npx -y speedybot webhook create -t 2kD2rqamZqbmphaulqYrV5amVqu9WOq11Re6bWR9YiW5N9ybFkPnkaeRl5O7mRfIncSe6jaFNsKf6UJEoOZS6lnFJDOU25R3mrrq5uo -w https://abcd123456.execute-api.us-east-1.amazonaws.com/speedybot',
   ]
 
   static flags = {

@@ -17,10 +17,11 @@ import {
 } from './../helpers'
 
 export default class Setup extends Command {
-  static description = 'Reveal information about a supplied token'
+  static description = 'Download, scaffold, setup, and even boot SpeedyBot projects locally'
   static examples = [
-    'npm init speedybot setup',
-    'npm init speedybot setup -p default -t 2kD2rqamZqbmphaulqYrV5amVqu9WOq11Re6bWR9YiW5N9ybFkPnkaeRl5O7mRfIncSe6jaFNsKf6UJEoOZS6lnFJDOU25R3mrrq5uo',
+    'npx -y speedybot@latest setup --help',
+    'npx -y speedybot@^2.0.0 setup --project default --boot --install',
+    `npx -y speedybot@^2.0.0 setup --project voiceflow-kb -e BOT_TOKEN -e VOICEFLOW_API_KEY --install --boot`,
   ]
 
   static flags = {
@@ -116,10 +117,10 @@ export default class Setup extends Command {
       flags.project = (await select({
         message: 'Pick a project type.',
         options: [
+          {hint: `If you're new, start here`, label: '🐣 Run a bot locally', value: 'speedybot-starter'},
           {hint: 'Serverless', label: '🦖 Deploy to Deno', value: 'deno'},
           {hint: 'Serverless', label: 'λ Deploy to AWS Lambda', value: 'lambda'},
           {hint: 'Can be serverless, example runs locally', label: '📲 LLM streaming responses', value: 'llm-stream'},
-          {label: '🐣 Run a bot locally', value: 'speedybot-starter'},
           {hint: `You'll need to deploy this to use`, label: '🌐 Express Server', value: 'standard-server'},
           {hint: 'Serverless', label: '🔥 Worker', value: 'worker'},
           {hint: 'LLM system', label: '📂 RAG with Voiceflow (file upload)', value: 'voiceflow-kb'},
@@ -166,11 +167,13 @@ export default class Setup extends Command {
         await runCommands([`cd ${projectPayload.targetDirectory} && npm i`])
       }
 
+      this.log(`
+📂 Your project is available here: ${getCurrentPath(projectPayload.targetDirectory)}
+  `)
       if (flags.boot && token) {
         await runCommands([`cd ${projectPayload.targetDirectory} && npm run bot:dev`])
       } else {
-        this.log(`Your project is available here: ${getCurrentPath(projectPayload.targetDirectory)}
-    
+        this.log(`    
 🤖 See the README to get up and running: ${getCurrentPath(getCurrentPath(projectPayload.targetDirectory), 'README.md')}
         `)
       }

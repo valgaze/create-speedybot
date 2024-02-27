@@ -4,11 +4,11 @@ import {SpeedyBot, logoRoll} from 'speedybot'
 
 import {botData, colorLogo} from '../../helpers'
 export default class WebhookList extends Command {
-  static description = 'Create a new webhook for your bot'
+  static description = 'List webhooks'
   static examples = [
-    'npm init speedybot webhook list',
-    'npm init speedybot webhook list -t 2kD2rqamZqbmphaulqYrV5amVqu9WOq11Re6bWR9YiW5N9ybFkPnkaeRl5O7mRfIncSe6jaFNsKf6UJEoOZS6lnFJDOU25R3mrrq5uo',
-    'npm init speedybot webhook list -t 2kD2rqamZqbmphaulqYrV5amVqu9WOq11Re6bWR9YiW5N9ybFkPnkaeRl5O7mRfIncSe6jaFNsKf6UJEoOZS6lnFJDOU25R3mrrq5uo',
+    'npx -y speedybot@latest webhook list --token 2kD2rqamZqbmphaulqYrV5amVqu9WOq11Re6bWR9YiW5N9ybFkPnkaeRl5O7mRfIncSe6jaFNsKf6UJEoOZS6lnFJDOU25R3mrrq5uo',
+    'npm init speedybot@latest webhook list',
+    'npm init speedybot@latest webhook list -- --t 2kD2rqamZqbmphaulqYrV5amVqu9WOq11Re6bWR9YiW5N9ybFkPnkaeRl5O7mRfIncSe6jaFNsKf6UJEoOZS6lnFJDOU25R3mrrq5uo',
   ]
 
   static flags = {

@@ -38,7 +38,7 @@ const isWindows = process.platform === 'win32'
 const cloneRepository = async (repositoryURL: string, tempDir: string) => {
   try {
     const stdioOptions: ExecSyncOptions = isWindows ? {stdio: 'ignore'} : {stdio: 'inherit'}
-    execSync(`git clone ${repositoryURL} ${tempDir}`, stdioOptions)
+    execSync(`git clone --depth 1 ${repositoryURL} ${tempDir}`, stdioOptions)
   } catch {
     throw new Error('Error cloning repository')
   }
