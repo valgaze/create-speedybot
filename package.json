@@ -9,7 +9,8 @@
     "@oclif/plugin-help": "^6",
     "@oclif/plugin-plugins": "^4",
     "picocolors": "^1.0.0",
-    "speedybot": "^2.0.0"
+    "speedybot": "^2.0.0",
+    "tar": "^7.1.0"
   },
   "description": "Speedybot cli",
   "devDependencies": {
@@ -63,7 +64,7 @@
     "version": "oclif readme && git add README.md",
     "publish:beta": "npm run build && npm publish --tag beta"
   },
-  "version": "2.0.7",
+  "version": "2.0.8",
   "bugs": "https://github.com/valgaze/create-speedybot/issues",
   "keywords": [
     "oclif"

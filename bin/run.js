@@ -3,7 +3,9 @@
 ;(async () => {
   // eslint-disable-next-line unicorn/no-array-callback-reference
   const [major] = process.versions.node.split('.').map(parseFloat)
-  if (major < 18) {
+  // eslint-disable-next-line no-undef
+  const hasBun = Boolean(typeof Bun)
+  if (major < 18 && !hasBun) {
     console.log(`
 ❌ ERROR!
 

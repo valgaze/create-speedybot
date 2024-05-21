@@ -3,7 +3,7 @@ import {resolve} from 'node:path'
 import * as pc from 'picocolors' // node 14+
 import {TextOptions, text} from '@clack/prompts'
 
-export {getProject, projectList, runCommands} from './cloner'
+export {getProject, getProjectTarGz, projectList, runCommands} from './cloner'
 export const botData: {email: string; id: string; name: string; type: string} = {email: '', id: '', name: '', type: ''}
 export const getCurrentPath = (...paths: string[]) => resolve(process.cwd(), ...paths)
 export function colorLogo(text: string): string {

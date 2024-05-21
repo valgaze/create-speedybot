@@ -11,6 +11,7 @@ import {
   getBotToken,
   getCurrentPath,
   getProject,
+  getProjectTarGz,
   projectList,
   runCommands,
   writeEnvFile,
@@ -46,6 +47,11 @@ export default class Setup extends Command {
       description: 'Variables to write to .env (will be prompted + mandatory if set)',
       multiple: true,
     }),
+    git: Flags.boolean({
+      aliases: ['use-git'],
+      char: 'g',
+      description: 'Fallback to  force cloning repository (requires git installed and available in shell)',
+    }),
     install: Flags.boolean({
       aliases: ['installDeps'],
       char: 'i',
@@ -70,6 +76,7 @@ export default class Setup extends Command {
 
   public async run(): Promise<void> {
     const {flags} = await this.parse(Setup)
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const debug = (...payload: any[]): void => {
       if (flags.debug) {
@@ -107,7 +114,10 @@ export default class Setup extends Command {
         botData.id = id
         botData.type = type
       }
-    } catch {
+    } catch (e) {
+      console.log(`[BETA DEBUG]`, e)
+      console.log(`[BETA DEBUG]`, {token})
+
       this.error(
         'Invalid WebEx token, double-check it or re-generate a token here: https://developer.webex.com/my-apps',
       )
@@ -146,15 +156,28 @@ export default class Setup extends Command {
     }
     debug('[Project Config]', projectPayload)
     try {
-      await getProject(
-        projectPayload.repositoryURL,
-        `examples/${projectPayload.project}`,
-        projectPayload.targetDirectory,
-      )
+      if (flags.git) {
+        await getProject(
+          projectPayload.repositoryURL,
+          `examples/${projectPayload.project}`,
+          projectPayload.targetDirectory,
+        )
+      } else {
+        const repoConfig = {
+          branch: 'v2',
+          name: 'speedybot',
+          username: 'valgaze',
+        }
+
+        await getProjectTarGz(repoConfig, {
+          destination: projectPayload.targetDirectory,
+          projectName: projectPayload.project,
+        })
+      }
 
       // Special handling w/ token to .env
       if (token) {
-        await writeEnvFile({[botTokenKey]: token}, {targetPath: getCurrentPath(projectPayload.project, '.env')})
+        await writeEnvFile({[botTokenKey]: token}, {targetPath: getCurrentPath(projectPayload.targetDirectory, '.env')})
       }
 
       // prompt + write any other .env's
@@ -178,7 +201,23 @@ export default class Setup extends Command {
 📂 Your project is available here: ${getCurrentPath(projectPayload.targetDirectory)}
   `)
       if (flags.boot && token) {
-        await runCommands([`cd ${projectPayload.targetDirectory} && npm run bot:dev`])
+        const isWindows = process.platform === 'win32'
+        if (isWindows && flags.bun) {
+          this.log(`
+It appears you are running Windows/PC, press CTRL-C if the script does not continue in a few seconds
+
+Enter the following commands by hand to boot your SpeedyBot:
+
+cd ${getCurrentPath(projectPayload.targetDirectory)}
+bun run dev
+          `)
+        }
+
+        await runCommands([
+          `cd ${getCurrentPath(projectPayload.targetDirectory)} && ${
+            projectPayload.useBun ? 'bun util/launch.ts' : 'npm run bot:dev'
+          }`,
+        ])
       } else {
         this.log(`    
 🤖 See the README to get up and running: ${getCurrentPath(getCurrentPath(projectPayload.targetDirectory), 'README.md')}
