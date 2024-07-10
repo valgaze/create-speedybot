@@ -71,7 +71,7 @@ export default class WebhookCreate extends Command {
     }
 
     // eslint-disable-next-line new-cap
-    await this.BotInst.Setup(webhookUrl, flags.secret)
+    await this.BotInst.Setup(webhookUrl, flags.secret!)
 
     this.log(`Webhook created! ${webhookUrl}`)
   }

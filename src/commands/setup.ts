@@ -132,6 +132,7 @@ export default class Setup extends Command {
         message: 'Pick a project type.',
         options: [
           {hint: `If you're new, start here`, label: '🐣 Run a bot locally', value: 'speedybot-starter'},
+          {hint: 'Private cloud', label: '🔗 Integrate with azure', value: 'azure'},
           {hint: 'Serverless', label: '🦖 Deploy to Deno', value: 'deno'},
           {hint: 'Serverless', label: 'λ Deploy to AWS Lambda', value: 'lambda'},
           {hint: 'Can be serverless, example runs locally', label: '📲 LLM streaming responses', value: 'llm-stream'},
