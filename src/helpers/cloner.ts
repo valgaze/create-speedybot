@@ -14,6 +14,7 @@ export const projectList = [
   'deno',
   'lambda',
   'llm-stream',
+  'azure',
   'speedybot-starter',
   'standard-server',
   'worker',
